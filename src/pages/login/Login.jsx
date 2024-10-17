@@ -1,14 +1,9 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Bounce, toast } from "react-toastify";
-import { useAppStore } from "../../store/Store";
+import useAuthStore from "../../store/AuthStore";
 
 const LoginForm = () => {
-const { updateEmail, updatePassword, password } = useAppStore((state) => state);  
-const email = useAppStore((state) => state.email); 
-
-useEffect(()=>{
-    console.log(email)
-},[email])
+  const { loginUser, user } = useAuthStore((state) => state);
 
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
@@ -30,12 +25,12 @@ useEffect(()=>{
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log(email,password)
     if (!validateForm()) return;
 
     // Storing user data in local storage (only for demonstration purposes)
-    localStorage.setItem("user", JSON.stringify(credentials));
-    localStorage.getItem("user", JSON.stringify(credentials))
+    
+    // loginUser(credentials);
+    localStorage.getItem("user", JSON.stringify(credentials));
 
     // Clear form fields
     setCredentials({ email: "", password: "" });
@@ -51,6 +46,10 @@ useEffect(()=>{
       theme: "light",
       transition: Bounce,
     });
+
+    loginUser(credentials);
+
+    console.log("user from zustand", user);
   };
 
   return (
@@ -62,15 +61,15 @@ useEffect(()=>{
           label="Email"
           type="email"
           name="email"
-          value={email}
-          onChange={(e) => updateEmail(e.target.value)}
+          value={credentials.email}
+          onChange={handleChange}
         />
         <InputField
           label="Password"
           type="password"
           name="password"
-          value={password}
-          onChange={(event)=>updatePassword(event.target.value)}
+          value={credentials.password}
+          onChange={handleChange}
         />
         <button
           type="submit"

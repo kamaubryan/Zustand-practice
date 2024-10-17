@@ -1,6 +1,10 @@
 import React from "react";
+import useAuthStore from "../../store/AuthStore";
 
 function Contact() {
+  const { isUserLoggedIn, user } = useAuthStore();
+  console.log("yyyyyyyyyyyyy", user);
+
   return (
     <div className="container w-full mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
       <h2 className="text-3xl font-bold text-gray-800">Contact Us</h2>
